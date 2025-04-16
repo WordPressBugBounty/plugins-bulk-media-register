@@ -19,6 +19,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $bulkmediaregisteradmin = new BulkMediaRegisterAdmin();
 
 /** ==================================================
@@ -61,7 +65,7 @@ class BulkMediaRegisterAdmin {
 			$links[] = '<a href="' . admin_url( 'admin.php?page=bulkmediaregister' ) . '">Bulk Media Register</a>';
 			$links[] = '<a href="' . admin_url( 'admin.php?page=bulkmediaregister-register' ) . '">' . __( 'Bulk Register', 'bulk-media-register' ) . '</a>';
 			$links[] = '<a href="' . admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) . '">' . __( 'Select Register', 'bulk-media-register' ) . '</a>';
-			$links[] = '<a href="' . admin_url( 'admin.php?page=bulkmediaregister-settings' ) . '">' . __( 'Settings' ) . '</a>';
+			$links[] = '<a href="' . admin_url( 'admin.php?page=bulkmediaregister-settings' ) . '">' . __( 'Settings', 'bulk-media-register' ) . '</a>';
 		}
 		return $links;
 	}
@@ -98,8 +102,8 @@ class BulkMediaRegisterAdmin {
 		);
 		add_submenu_page(
 			'bulkmediaregister',
-			__( 'Settings' ),
-			__( 'Settings' ),
+			__( 'Settings', 'bulk-media-register' ),
+			__( 'Settings', 'bulk-media-register' ),
 			'upload_files',
 			'bulkmediaregister-settings',
 			array( $this, 'settings_page' )
@@ -167,7 +171,7 @@ class BulkMediaRegisterAdmin {
 	public function register_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'bulk-media-register' ) );
 		}
 
 		do_action( 'bulk_media_register_notices' );
@@ -182,7 +186,7 @@ class BulkMediaRegisterAdmin {
 
 		<h2>Bulk Media Register <a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-register' ) ); ?>" style="text-decoration: none;"><?php esc_html_e( 'Bulk Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Select Register', 'bulk-media-register' ); ?></a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings' ); ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-wpcron' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Cron Event', 'bulk-media-register' ); ?></a>
 			<?php
 			if ( current_user_can( 'manage_options' ) ) {
@@ -288,7 +292,7 @@ class BulkMediaRegisterAdmin {
 							<?php wp_nonce_field( 'bmr_search', 'bulk_media_register_search' ); ?>
 							<div style="margin: 5px; padding: 5px;">
 							<input name="search_text" type="text" placeholder="<?php echo esc_attr__( 'Filter by text', 'bulk-media-register' ); ?>" style="width: 200px;">
-							<?php submit_button( __( 'Search' ), 'large', 'bulk-media-register-search', false ); ?>
+							<?php submit_button( __( 'Search', 'bulk-media-register' ), 'large', 'bulk-media-register-search', false ); ?>
 							</div>
 							</form>
 							<?php
@@ -310,7 +314,7 @@ class BulkMediaRegisterAdmin {
 	public function select_register_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'bulk-media-register' ) );
 		}
 
 		do_action( 'bulk_media_register_notices' );
@@ -338,7 +342,7 @@ class BulkMediaRegisterAdmin {
 
 		<h2>Bulk Media Register <a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) ); ?>" style="text-decoration: none;"><?php esc_html_e( 'Select Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-register' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Bulk Register', 'bulk-media-register' ); ?></a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings' ); ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-wpcron' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Cron Event', 'bulk-media-register' ); ?></a>
 			<?php
 			if ( current_user_can( 'manage_options' ) ) {
@@ -372,14 +376,14 @@ class BulkMediaRegisterAdmin {
 					wp_nonce_field( 'bmr_search_text', 'bulk_media_register_search_text' );
 					if ( ! $search_text ) {
 						?>
-						<input name="search_text" type="text" value="" placeholder="<?php echo esc_attr__( 'Search' ); ?>">
+						<input name="search_text" type="text" value="" placeholder="<?php echo esc_attr__( 'Search', 'bulk-media-register' ); ?>">
 						<?php
 					} else {
 						?>
 						<input name="search_text" type="text" value="<?php echo esc_attr( $search_text ); ?>">
 						<?php
 					}
-					submit_button( __( 'Search' ), 'large', 'bulk-media-register-searchtext', false );
+					submit_button( __( 'Search', 'bulk-media-register' ), 'large', 'bulk-media-register-searchtext', false );
 					?>
 					</form>
 					</div>
@@ -424,7 +428,7 @@ class BulkMediaRegisterAdmin {
 	public function settings_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'bulk-media-register' ) );
 		}
 
 		$this->options_updated();
@@ -436,7 +440,7 @@ class BulkMediaRegisterAdmin {
 		?>
 		<div class="wrap">
 
-		<h2>Bulk Media Register <a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" style="text-decoration: none;"><?php esc_html_e( 'Settings' ); ?></a>
+		<h2>Bulk Media Register <a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" style="text-decoration: none;"><?php esc_html_e( 'Settings', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-register' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Bulk Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Select Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-wpcron' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Cron Event', 'bulk-media-register' ); ?></a>
@@ -461,13 +465,13 @@ class BulkMediaRegisterAdmin {
 				<form method="post" action="<?php echo esc_url( $scriptname ); ?>">
 				<?php wp_nonce_field( 'bmr_settings', 'bulk_media_register_settings' ); ?>
 				<details style="margin-bottom: 5px;" open>
-				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Search' ); ?></strong></summary>
+				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Search', 'bulk-media-register' ); ?></strong></summary>
 					<div style="display: block;padding:5px 5px">
 					<input name="bulkmediaregister_recursive_search" type="checkbox" value="1" <?php checked( $bulkmediaregister_settings['recursive_search'], true ); ?>><?php esc_html_e( 'Recursively search files below specified folder.', 'bulk-media-register' ); ?>
 					</div>
 				</details>
 				<details style="margin-bottom: 5px;" open>
-				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Date' ); ?></strong></summary>
+				<summary style="cursor: pointer; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; color: #000;"><strong><?php esc_html_e( 'Date', 'bulk-media-register' ); ?></strong></summary>
 					<div style="display: block;padding:5px 5px">
 					<input type="radio" name="bulkmediaregister_dateset" value="new" 
 					<?php
@@ -589,7 +593,7 @@ class BulkMediaRegisterAdmin {
 					<?php esc_html_e( 'Remove the cache of thumbnail used in the search screen. Please try out if trouble occurs in the search screen. It might become normal.', 'bulk-media-register' ); ?>
 					</p>
 				</details>
-				<?php submit_button( __( 'Save Changes' ), 'large', 'bulk-media-register-settings-options-apply', true ); ?>
+				<?php submit_button( __( 'Save Changes', 'bulk-media-register' ), 'large', 'bulk-media-register-settings-options-apply', true ); ?>
 				</form>
 				<form method="post" id="thumbnails_cash_clear" action="<?php echo esc_url( $scriptname ); ?>" />
 					<?php wp_nonce_field( 'bmr_clear_cash', 'bulk_media_register_clear_cash' ); ?>
@@ -608,7 +612,7 @@ class BulkMediaRegisterAdmin {
 	public function manage_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'bulk-media-register' ) );
 		}
 
 		?>
@@ -618,7 +622,7 @@ class BulkMediaRegisterAdmin {
 		<h2>Bulk Media Register
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-register' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Bulk Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Select Register', 'bulk-media-register' ); ?></a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings' ); ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-wpcron' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Cron Event', 'bulk-media-register' ); ?></a>
 			<?php
 			if ( current_user_can( 'manage_options' ) ) {
@@ -681,7 +685,7 @@ class BulkMediaRegisterAdmin {
 				}
 			}
 		}
-		$plugin_version = __( 'Version:' ) . ' ' . $plugin_ver_num;
+		$plugin_version = __( 'Version:', 'bulk-media-register' ) . ' ' . $plugin_ver_num;
 		/* translators: FAQ Link & Slug */
 		$faq       = sprintf( esc_html__( 'https://wordpress.org/plugins/%s/faq', 'bulk-media-register' ), $slug );
 		$support   = 'https://wordpress.org/support/plugin/' . $slug;
@@ -702,7 +706,7 @@ class BulkMediaRegisterAdmin {
 		<a style="text-decoration: none;" href="<?php echo esc_url( $translate ); ?>" target="_blank" rel="noopener noreferrer">
 		<?php
 		/* translators: Plugin translation link */
-		echo esc_html( sprintf( __( 'Translations for %s' ), $plugin_name ) );
+		echo esc_html( sprintf( __( 'Translations for %s', 'bulk-media-register' ), $plugin_name ) );
 		?>
 		</a> | <a style="text-decoration: none;" href="<?php echo esc_url( $facebook ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-facebook"></span></a> | <a style="text-decoration: none;" href="<?php echo esc_url( $twitter ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-twitter"></span></a> | <a style="text-decoration: none;" href="<?php echo esc_url( $youtube ); ?>" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-video-alt3"></span></a>
 		</div>
@@ -711,7 +715,7 @@ class BulkMediaRegisterAdmin {
 		<div style="width: 250px; height: 180px; margin: 5px; padding: 5px; border: #CCC 2px solid;">
 		<h3><?php esc_html_e( 'Please make a donation if you like my work or would like to further the development of this plugin.', 'bulk-media-register' ); ?></h3>
 		<div style="text-align: right; margin: 5px; padding: 5px;"><span style="padding: 3px; color: #ffffff; background-color: #008000">Plugin Author</span> <span style="font-weight: bold;">Katsushi Kawamori</span></div>
-		<button type="button" style="margin: 5px; padding: 5px;" onclick="window.open('<?php echo esc_url( $donate ); ?>')"><?php esc_html_e( 'Donate to this plugin &#187;' ); ?></button>
+		<button type="button" style="margin: 5px; padding: 5px;" onclick="window.open('<?php echo esc_url( $donate ); ?>')"><?php esc_html_e( 'Donate to this plugin &#187;', 'bulk-media-register' ); ?></button>
 		</div>
 
 		<?php
@@ -751,7 +755,7 @@ class BulkMediaRegisterAdmin {
 					$bulkmediaregister_settings['mail_send'] = false;
 				}
 				update_user_option( get_current_user_id(), 'bulkmediaregister', $bulkmediaregister_settings );
-				echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings' ) . ' --> ' . __( 'Changes saved.' ) ) . '</li></ul></div>';
+				echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings', 'bulk-media-register' ) . ' --> ' . __( 'Changes saved.', 'bulk-media-register' ) ) . '</li></ul></div>';
 			}
 		}
 
@@ -775,7 +779,7 @@ class BulkMediaRegisterAdmin {
 			if ( check_admin_referer( 'bmr_clear_cash', 'bulk_media_register_clear_cash' ) ) {
 				do_action( 'bmr_delete_all_cash' );
 				if ( 0 < get_option( 'bulkmediaregister_cash' ) ) {
-					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Thumbnails Cache', 'bulk-media-register' ) . ' --> ' . __( 'Delete' ) ) . '</li></ul></div>';
+					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Thumbnails Cache', 'bulk-media-register' ) . ' --> ' . __( 'Delete', 'bulk-media-register' ) ) . '</li></ul></div>';
 				} else {
 					echo '<div class="notice notice-info is-dismissible"><ul><li>' . esc_html__( 'No Thumbnails Cache', 'bulk-media-register' ) . '</li></ul></div>';
 				}
@@ -787,7 +791,7 @@ class BulkMediaRegisterAdmin {
 				if ( ! empty( $_POST['per_page'] ) ) {
 					$bulkmediaregister_settings['per_page'] = absint( $_POST['per_page'] );
 					update_user_option( get_current_user_id(), 'bulkmediaregister', $bulkmediaregister_settings );
-					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings' ) . ' --> ' . __( 'Changes saved.' ) ) . '</li></ul></div>';
+					echo '<div class="notice notice-success is-dismissible"><ul><li>' . esc_html( __( 'Settings', 'bulk-media-register' ) . ' --> ' . __( 'Changes saved.', 'bulk-media-register' ) ) . '</li></ul></div>';
 				}
 			}
 		}
@@ -854,7 +858,7 @@ class BulkMediaRegisterAdmin {
 	public function cron_page() {
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'bulk-media-register' ) );
 		}
 
 		?>
@@ -863,7 +867,7 @@ class BulkMediaRegisterAdmin {
 		<h2>Bulk Media Register <a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-wpcron' ) ); ?>" style="text-decoration: none;"><?php esc_html_e( 'Cron Event', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-register' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Bulk Register', 'bulk-media-register' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-selectregister' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Select Register', 'bulk-media-register' ); ?></a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings' ); ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=bulkmediaregister-settings' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Settings', 'bulk-media-register' ); ?></a>
 			<?php
 			if ( current_user_can( 'manage_options' ) ) {
 				if ( class_exists( 'MovingMediaLibrary' ) ) {

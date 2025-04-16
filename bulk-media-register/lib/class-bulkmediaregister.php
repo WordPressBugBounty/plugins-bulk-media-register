@@ -19,6 +19,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $bulkmediaregister = new BulkMediaRegister();
 
 /** ==================================================
@@ -376,7 +380,7 @@ class BulkMediaRegister {
 		?>
 		</select>
 
-		<?php submit_button( __( 'Select' ), 'large', 'bulk-media-register-folder', false ); ?>
+		<?php submit_button( __( 'Select', 'bulk-media-register' ), 'large', 'bulk-media-register-folder', false ); ?>
 		</form>
 		<?php
 	}
@@ -590,16 +594,16 @@ class BulkMediaRegister {
 			if ( ! $csvs ) {
 				$csvs[0] = array(
 					'ID',
-					__( 'Title' ),
-					__( 'Permalink:' ),
+					__( 'Title', 'bulk-media-register' ),
+					__( 'Permalink:', 'bulk-media-register' ),
 					'URL',
-					__( 'File name:' ),
+					__( 'File name:', 'bulk-media-register' ),
 					__( 'Original URL:', 'bulk-media-register' ),
 					__( 'Original File name:', 'bulk-media-register' ),
-					__( 'Date/Time' ),
-					__( 'File type:' ),
-					__( 'File size:' ),
-					__( 'Length:' ),
+					__( 'Date/Time', 'bulk-media-register' ),
+					__( 'File type:', 'bulk-media-register' ),
+					__( 'File size:', 'bulk-media-register' ),
+					__( 'Length:', 'bulk-media-register' ),
 				);
 			}
 			list( $messages, $csvs ) = $this->mail_messages( $messages, $csvs, $bulkmediaregister_output );
@@ -629,29 +633,29 @@ class BulkMediaRegister {
 			$img_url = array();
 
 			$message = 'ID: ' . $output['attach_id'] . "\n";
-			$message .= __( 'Title' ) . ': ' . $output['title'] . "\n";
-			$message .= __( 'Permalink:' ) . ' ' . $output['attachment_link'] . "\n";
+			$message .= __( 'Title', 'bulk-media-register' ) . ': ' . $output['title'] . "\n";
+			$message .= __( 'Permalink:', 'bulk-media-register' ) . ' ' . $output['attachment_link'] . "\n";
 			$message .= 'URL: ' . $output['attachment_url'] . "\n";
-			$message .= __( 'File name:' ) . ' ' . $output['filename'] . "\n";
+			$message .= __( 'File name:', 'bulk-media-register' ) . ' ' . $output['filename'] . "\n";
 			if ( ! empty( $output['original_image_url'] ) ) {
 				$message .= __( 'Original URL:', 'bulk-media-register' ) . ' ' . $output['original_image_url'] . "\n";
 				$message .= __( 'Original File name:', 'bulk-media-register' ) . ' ' . $output['original_filename'] . "\n";
 				$original_image_url = $output['original_image_url'];
 				$original_filename = $output['original_filename'];
 			}
-			$message .= __( 'Date/Time' ) . ': ' . $output['stamptime'] . "\n";
-			$message .= __( 'File type:' ) . ' ' . $output['mime_type'] . "\n";
-			$message .= __( 'File size:' ) . ' ' . $output['file_size'] . "\n";
+			$message .= __( 'Date/Time', 'bulk-media-register' ) . ': ' . $output['stamptime'] . "\n";
+			$message .= __( 'File type:', 'bulk-media-register' ) . ' ' . $output['mime_type'] . "\n";
+			$message .= __( 'File size:', 'bulk-media-register' ) . ' ' . $output['file_size'] . "\n";
 			if ( ( 'image' === $output['file_type'] || 'pdf' === strtolower( $output['ext'] ) ) && ! empty( $output['imagethumburls'] ) ) {
 				if ( ! empty( $output['imagethumburls'] ) ) {
-					$message .= __( 'Images' ) . ': ' . "\n";
+					$message .= __( 'Images', 'bulk-media-register' ) . ': ' . "\n";
 					foreach ( $output['imagethumburls'] as $thumbsize => $imagethumburl ) {
 						$message .= $thumbsize . ': ' . $imagethumburl . "\n";
 						$img_url[] = $imagethumburl;
 					}
 				}
 			} elseif ( 'video' === $output['file_type'] || 'audio' === $output['file_type'] ) {
-					$message .= __( 'Length:' ) . ' ' . $output['length'] . "\n";
+					$message .= __( 'Length:', 'bulk-media-register' ) . ' ' . $output['length'] . "\n";
 					$length = $output['length'];
 			}
 			$message .= "\n";
@@ -712,7 +716,7 @@ class BulkMediaRegister {
 			$start_comma = count( $csvs[0] );
 			$plus_comma = $max_col_count - count( $csvs[0] );
 			for ( $i = $start_comma; $i < $start_comma + $plus_comma; $i++ ) {
-				$csvs[0][ $i ] = __( 'Images' ) . strval( $i - $start_comma + 1 );
+				$csvs[0][ $i ] = __( 'Images', 'bulk-media-register' ) . strval( $i - $start_comma + 1 );
 			}
 
 			$csv_filename = sanitize_file_name( 'registered' . $now_date_time . '.csv' );
@@ -851,25 +855,25 @@ class BulkMediaRegister {
 					$output_html .= '<img width="40" height="40" src="' . $output['image_thumbnail'] . '" style="float: left; margin: 5px;">';
 					$output_html .= '<div style="overflow: hidden;">';
 					$output_html .= '<div>ID: ' . $output['attach_id'] . '</div>';
-					$output_html .= '<div>' . __( 'Title' ) . ': ' . $output['title'] . '</div>';
-					$output_html .= '<div>' . __( 'Permalink:' ) . ' <a href="' . $output['attachment_link'] . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $output['attachment_link'] . '</a></div>';
+					$output_html .= '<div>' . __( 'Title', 'bulk-media-register' ) . ': ' . $output['title'] . '</div>';
+					$output_html .= '<div>' . __( 'Permalink:', 'bulk-media-register' ) . ' <a href="' . $output['attachment_link'] . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $output['attachment_link'] . '</a></div>';
 					$output_html .= '<div>URL: <a href="' . $output['attachment_url'] . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $output['attachment_url'] . '</a></div>';
-					$output_html .= '<div>' . __( 'File name:' ) . ' ' . $output['filename'] . '</div>';
+					$output_html .= '<div>' . __( 'File name:', 'bulk-media-register' ) . ' ' . $output['filename'] . '</div>';
 					if ( ! empty( $output['original_image_url'] ) ) {
 						$output_html .= '<div>' . __( 'Original URL', 'bulk-media-register' ) . ': <a href="' . $output['original_image_url'] . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $output['original_image_url'] . '</a></div>';
 						$output_html .= '<div>' . __( 'Original File name', 'bulk-media-register' ) . ': ' . $output['original_filename'] . '</div>';
 					}
-					$output_html .= '<div>' . __( 'Date/Time' ) . ': ' . $output['stamptime'] . '</div>';
-					$output_html .= '<div>' . __( 'File type:' ) . ' ' . $output['mime_type'] . '</div>';
-					$output_html .= '<div>' . __( 'File size:' ) . ' ' . $output['file_size'] . '</div>';
+					$output_html .= '<div>' . __( 'Date/Time', 'bulk-media-register' ) . ': ' . $output['stamptime'] . '</div>';
+					$output_html .= '<div>' . __( 'File type:', 'bulk-media-register' ) . ' ' . $output['mime_type'] . '</div>';
+					$output_html .= '<div>' . __( 'File size:', 'bulk-media-register' ) . ' ' . $output['file_size'] . '</div>';
 					if ( ( 'image' === $output['file_type'] || 'pdf' === strtolower( $output['ext'] ) ) && ! empty( $output['imagethumburls'] ) ) {
-						$output_html .= '<div>' . __( 'Images' ) . ': ';
+						$output_html .= '<div>' . __( 'Images', 'bulk-media-register' ) . ': ';
 						foreach ( $output['imagethumburls'] as $thumbsize => $imagethumburl ) {
 							$output_html .= '[<a href="' . $imagethumburl . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $thumbsize . '</a>]';
 						}
 						$output_html .= '</div>';
 					} elseif ( 'video' === $output['file_type'] || 'audio' === $output['file_type'] ) {
-							$output_html .= '<div>' . __( 'Length:' ) . ' ' . $output['length'] . '</div>';
+							$output_html .= '<div>' . __( 'Length:', 'bulk-media-register' ) . ' ' . $output['length'] . '</div>';
 					}
 					$output_html .= '</div></div>';
 				} else {
@@ -1159,8 +1163,8 @@ class BulkMediaRegister {
 		$bulkmediaregister_settings = get_user_option( 'bulkmediaregister', $uid );
 		?>
 		<div style="margin: 0px; text-align: right;">
-			<?php esc_html_e( 'Number of items per page:' ); ?><input type="number" step="1" min="1" max="9999" style="width: 80px;" name="per_page" value="<?php echo esc_attr( $bulkmediaregister_settings['per_page'] ); ?>" form="select_media_register_per_page_forms" />
-			<?php submit_button( __( 'Change' ), 'large', 'per_page_change', false, array( 'form' => 'select_media_register_per_page_forms' ) ); ?>
+			<?php esc_html_e( 'Number of items per page:', 'bulk-media-register' ); ?><input type="number" step="1" min="1" max="9999" style="width: 80px;" name="per_page" value="<?php echo esc_attr( $bulkmediaregister_settings['per_page'] ); ?>" form="select_media_register_per_page_forms" />
+			<?php submit_button( __( 'Change', 'bulk-media-register' ), 'large', 'per_page_change', false, array( 'form' => 'select_media_register_per_page_forms' ) ); ?>
 		</div>
 		<?php
 	}

@@ -22,6 +22,10 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
 	require_once ABSPATH . 'wp-admin/includes/screen.php';
@@ -192,9 +196,9 @@ class TT_BulkMediaRegister_List_Table extends WP_List_Table {
 		$input_html .= '<div style="overflow: hidden;">';
 		$input_html .= '<div><a href="' . $url . '" target="_blank" rel="noopener noreferrer" style="text-decoration: none; word-break: break-all;">' . $url . '</a></div>';
 
-		$input_html .= '<div>' . __( 'File size:' ) . ' ' . $file_size . '</div>';
+		$input_html .= '<div>' . __( 'File size:', 'bulk-media-register' ) . ' ' . $file_size . '</div>';
 		if ( 'audio' === wp_ext2type( $ext ) || 'video' === wp_ext2type( $ext ) ) {
-			$input_html .= '<div>' . __( 'Length:' ) . ' ' . $length . '</div>';
+			$input_html .= '<div>' . __( 'Length:', 'bulk-media-register' ) . ' ' . $length . '</div>';
 		}
 		$input_html .= '</div>';
 
@@ -344,8 +348,8 @@ class TT_BulkMediaRegister_List_Table extends WP_List_Table {
 		$columns = array(
 			'cb'       => '<input type="checkbox" />', /* Render a checkbox instead of text */
 			'title'    => __( 'File', 'bulk-media-register' ),
-			'datetime' => __( 'Date/time' ),
-			'filetype' => __( 'File type:' ),
+			'datetime' => __( 'Date/time', 'bulk-media-register' ),
+			'filetype' => __( 'File type:', 'bulk-media-register' ),
 		);
 		return $columns;
 	}
@@ -416,7 +420,7 @@ class TT_BulkMediaRegister_List_Table extends WP_List_Table {
 			<label for="cb-select-all-' . $cb_counter . '">' .
 				'<span class="screen-reader-text">' .
 					/* translators: Hidden accessibility text. */
-					__( 'Select All' ) .
+					__( 'Select All', 'bulk-media-register' ) .
 				'</span>' .
 				'</label>';
 			++$cb_counter;
@@ -488,9 +492,9 @@ class TT_BulkMediaRegister_List_Table extends WP_List_Table {
 					$class[] = 'desc' === $order ? 'asc' : 'desc';
 
 					/* translators: Hidden accessibility text. */
-					$asc_text = __( 'Sort ascending.' );
+					$asc_text = __( 'Sort ascending.', 'bulk-media-register' );
 					/* translators: Hidden accessibility text. */
-					$desc_text  = __( 'Sort descending.' );
+					$desc_text  = __( 'Sort descending.', 'bulk-media-register' );
 					$order_text = 'asc' === $order ? $asc_text : $desc_text;
 				}
 

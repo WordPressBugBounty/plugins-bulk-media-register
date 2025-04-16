@@ -3,7 +3,7 @@
  * Plugin Name: Bulk Media Register
  * Plugin URI:  https://wordpress.org/plugins/bulk-media-register/
  * Description: Bulk register files on the server to the Media Library.
- * Version:     1.40
+ * Version:     1.41
  * Author:      Katsushi Kawamori
  * Author URI:  https://riverforest-wp.info/
  * License:     GPLv2 or later
