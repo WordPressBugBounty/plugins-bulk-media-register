@@ -38,6 +38,8 @@ class BulkMediaRegisterAdmin {
 	public function __construct() {
 
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'check_and_deactivate_old_addon' ) );
+		add_action( 'admin_notices', array( $this, 'display_integrated_addon_notice' ) );
 
 		add_action( 'admin_menu', array( $this, 'add_pages' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_custom_wp_admin_style1' ) );
@@ -127,8 +129,8 @@ class BulkMediaRegisterAdmin {
 		if ( $this->is_my_plugin_screen1() ) {
 			wp_enqueue_style( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . '/css/jquery.datetimepicker.css', array(), '2.3.4' );
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . '/js/jquery.datetimepicker.js', null, '2.3.4' );
-			wp_enqueue_script( 'bulkmediaregister-admin-js', plugin_dir_url( __DIR__ ) . 'js/jquery.bulkmediaregister.admin.js', array( 'jquery' ), array(), '1.00', false );
+			wp_enqueue_script( 'jquery-datetimepicker', plugin_dir_url( __DIR__ ) . '/js/jquery.datetimepicker.js', null, '2.3.4', true );
+			wp_enqueue_script( 'bulkmediaregister-admin-js', plugin_dir_url( __DIR__ ) . 'js/jquery.bulkmediaregister.admin.js', array( 'jquery' ), '1.00', false );
 		}
 	}
 
@@ -153,10 +155,10 @@ class BulkMediaRegisterAdmin {
 	 */
 	private function is_my_plugin_screen2() {
 		$screen = get_current_screen();
-		if ( is_object( $screen ) && 'toplevel_page_bulkmediaregister' === $screen->id ||
-				is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-register' === $screen->id ||
-				is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-selectregister' === $screen->id ||
-				is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-settings' === $screen->id ) {
+		if ( ( is_object( $screen ) && 'toplevel_page_bulkmediaregister' === $screen->id ) ||
+				( is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-register' === $screen->id ) ||
+				( is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-selectregister' === $screen->id ) ||
+				( is_object( $screen ) && 'bulk-media-register_page_bulkmediaregister-settings' === $screen->id ) ) {
 			return true;
 		} else {
 			return false;
@@ -886,36 +888,45 @@ class BulkMediaRegisterAdmin {
 		<div style="clear: both;"></div>
 
 		<div class="wrap">
-			<?php
-			$add_on_base_dir = rtrim( untrailingslashit( plugin_dir_path( __DIR__ ) ), 'bulk-media-register' ) . 'bulk-media-register-add-on-wpcron';
-			if ( is_dir( $add_on_base_dir ) ) {
-				if ( function_exists( 'bulk_media_register_add_on_wpcron_load_textdomain' ) ) {
-					do_action( 'bmr_cron_page', get_current_user_id() );
-				} else {
-					?>
-					<h4><?php esc_html_e( 'Installed but deactivated.', 'bulk-media-register' ); ?></h4>
-					<?php
-					if ( is_multisite() ) {
-						$plugin_page = network_admin_url( 'plugins.php' );
-					} else {
-						$plugin_page = admin_url( 'plugins.php' );
-					}
-					?>
-					<a href="<?php echo esc_url( $plugin_page ); ?>" class="page-title-action"><?php esc_html_e( 'Activate "Bulk Media Register Add On Wp Cron"', 'bulk-media-register' ); ?></a>
-					<?php
-				}
-			} else {
-				?>
-				<div>
-				<h4><?php esc_html_e( 'Add-on are required.', 'bulk-media-register' ); ?> <?php esc_html_e( 'This add-on can register and execute Cron Event by "Bulk Media Register".', 'bulk-media-register' ); ?></h4>
-				<a href="<?php echo esc_url( __( 'https://shop.riverforest-wp.info/bulk-media-register-add-on-wpcron/', 'bulk-media-register' ) ); ?>" target="_blank" rel="noopener noreferrer" class="page-title-action"><?php esc_html_e( 'BUY', 'bulk-media-register' ); ?></a>
-				</div>
-				<?php
-			}
-			?>
+			<?php do_action( 'bmr_cron_page', get_current_user_id() ); ?>
 		</div>
 		<?php
 	}
+
+	/** ==================================================
+	 * Detecting and Disabling Legacy Add-ons, and Setting Notification Flags
+	 *
+	 * @since 2.00
+	 */
+	public function check_and_deactivate_old_addon() {
+
+		$addon_plugin_slug = 'bulk-media-register-add-on-wpcron/bulkmediaregisteraddonwpcron.php';
+
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( is_plugin_active( $addon_plugin_slug ) ) {
+			deactivate_plugins( $addon_plugin_slug );
+
+			set_transient( 'bmr_integrated_addon_deactivated_notice', true, 5 * MINUTE_IN_SECONDS );
+		}
+	}
+
+	/** ==================================================
+	 * Displaying a notification message about add-on deactivation in the admin panel
+	 *
+	 * @since 2.00
+	 */
+	public function display_integrated_addon_notice() {
+
+		if ( get_transient( 'bmr_integrated_addon_deactivated_notice' ) ) {
+			?>
+			<div class="notice notice-info is-dismissible">
+				<ul><li><?php echo esc_html_e( 'Since the add-on features have been integrated into the main plugin (Bulk Media Register), we have disabled the add-on (Bulk Media Register Add On Wp Cron). Please remove the no-longer-needed add-on (Bulk Media Register Add On Wp Cron) from your plugin list.', 'bulk-media-register' ); ?></li></ul>
+			</div>
+			<?php
+			delete_transient( 'bmr_integrated_addon_deactivated_notice' );
+		}
+	}
 }
-
-

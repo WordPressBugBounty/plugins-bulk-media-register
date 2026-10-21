@@ -24,6 +24,10 @@ if ( ! is_multisite() ) {
 		delete_user_option( $user->ID, 'bulkmediaregister_dirs_break', false );
 		delete_user_option( $user->ID, 'bulkmediaregister_lists_break', false );
 		delete_user_option( $user->ID, 'bulkmediaregister_search_text', false );
+		delete_user_option( $user->ID, 'bulkmediaregister_wpcron', false );
+		delete_user_option( $user->ID, 'bulkmediaregister_wpcron_search_text', false );
+		delete_user_option( $user->ID, 'bulkmediaregister_crondo', false );
+		delete_user_option( $user->ID, 'bulkmediaregister_event_intervals', false );
 	}
 } else {
 	/* For Multisite */
@@ -47,6 +51,10 @@ if ( ! is_multisite() ) {
 			delete_user_option( $user->ID, 'bulkmediaregister_dirs_break', false );
 			delete_user_option( $user->ID, 'bulkmediaregister_lists_break', false );
 			delete_user_option( $user->ID, 'bulkmediaregister_search_text', false );
+			delete_user_option( $user->ID, 'bulkmediaregister_wpcron', false );
+			delete_user_option( $user->ID, 'bulkmediaregister_wpcron_search_text', false );
+			delete_user_option( $user->ID, 'bulkmediaregister_crondo', false );
+			delete_user_option( $user->ID, 'bulkmediaregister_event_intervals', false );
 		}
 	}
 	switch_to_blog( $original_blog_id );

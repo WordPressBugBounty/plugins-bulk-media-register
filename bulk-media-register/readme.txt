@@ -2,10 +2,10 @@
 Contributors: Katsushi Kawamori
 Donate link: https://shop.riverforest-wp.info/donate/
 Tags: files, ftp, import, media, uploads
-Requires at least: 4.6
+Requires at least: 5.3
 Requires PHP: 8.0
-Tested up to: 6.9
-Stable tag: 1.41
+Tested up to: 7.1
+Stable tag: 2.00
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,11 @@ Bulk register files on the server to the Media Library.
 * This create a thumbnail of the image file.
 * This create a metadata(Images, Videos, Audios).
 * Change the date/time.
+* Register via the wp cron event.
+* Regsiter via the Command Line
+
+= Schedule for wp cron event=
+* Can add intervals of schedule.
 
 = Sibling plugin =
 * [Moving Media Library](https://wordpress.org/plugins/moving-media-library/).
@@ -48,8 +53,13 @@ none
 3. Select Register
 4. Register to Media Library
 5. Settings
+6. Cron Event
 
 == Changelog ==
+
+= [2.00] 2026/10/21 =
+* Added - Register via the wp cron event.
+* Added - Register via the Command Line.
 
 = [1.41] 2025/04/16 =
 * Fix - Loading the management screen.
