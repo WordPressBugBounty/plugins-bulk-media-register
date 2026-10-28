@@ -838,16 +838,29 @@ class BulkMediaRegister {
 		if ( check_ajax_referer( $action1, 'nonce', false ) ) {
 			if ( current_user_can( 'upload_files' ) ) {
 				if ( ! empty( $_POST['file'] ) ) {
-					$file = sanitize_text_field( wp_unslash( $_POST['file'] ) );
-					if ( false === strpos( $file, ABSPATH ) ) {
-						return;
+					$raw_file = sanitize_text_field( wp_unslash( $_POST['file'] ) );
+					/* Use `realpath()` to normalize the path to an absolute path and check whether it is within the upload directory */
+					$real_file = realpath( $raw_file );
+					if ( ! $real_file || ! $this->upload_dir || strpos( $real_file, $this->upload_dir ) !== 0 ) {
+						status_header( '403' );
+						echo 'Forbidden';
+						wp_die();
 					}
+
+					/* Files whose names begin with a period (such as .htaccess) are rejected because they can be exploited for access control purposes. */
+					$basename = wp_basename( $real_file );
+					if ( '.' === substr( $basename, 0, 1 ) ) {
+						status_header( '403' );
+						echo 'Forbidden';
+						wp_die();
+					}
+
+					$file = $real_file;
 				} else {
 					return;
 				}
-				if ( ! empty( $_POST['uid'] ) ) {
-					$uid = absint( $_POST['uid'] );
-				}
+				/* Do not use an external UID; enforce the currently logged-in user ID. */
+				$uid = get_current_user_id();
 				if ( is_file( $file ) ) {
 					$output = apply_filters( 'bmr_regist', $file, $uid );
 
@@ -878,7 +891,7 @@ class BulkMediaRegister {
 					$output_html .= '</div></div>';
 				} else {
 					$error_string = __( 'No file!', 'bulk-media-register' );
-					$output_html = '<div>' . $file . ': <span style="color: red;">' . $error_string . '</span></div>';
+					$output_html = '<div>' . esc_html( $file ) . ': <span style="color: red;">' . esc_html( $error_string ) . '</span></div>';
 				}
 
 				header( 'Content-type: text/html; charset=UTF-8' );
@@ -941,9 +954,8 @@ class BulkMediaRegister {
 			if ( ! empty( $_POST['success_count'] ) ) {
 				$success_count = absint( $_POST['success_count'] );
 			}
-			if ( ! empty( $_POST['uid'] ) ) {
-				$uid = absint( $_POST['uid'] );
-			}
+			/* Do not use an external UID; enforce the currently logged-in user ID. */
+			$uid = get_current_user_id();
 
 			$output_html = null;
 			if ( $error_count > 0 ) {

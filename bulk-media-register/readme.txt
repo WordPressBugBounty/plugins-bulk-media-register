@@ -5,7 +5,7 @@ Tags: files, ftp, import, media, uploads
 Requires at least: 5.3
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 2.00
+Stable tag: 2.01
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,9 @@ none
 6. Cron Event
 
 == Changelog ==
+
+= [2.01] 2026/10/28 =
+* Fix - Security fix for path traversal and file handling vulnerability (Thanks to Rafael Honorato).
 
 = [2.00] 2026/10/21 =
 * Added - Register via the wp cron event.
@@ -198,3 +201,8 @@ Security measures.
 
 = 1.00 =
 Initial release.
+
+== Upgrade Notice ==
+
+= 2.01 =
+Measures Against Path Traversal. This was reported to us by Rafael Honorato
