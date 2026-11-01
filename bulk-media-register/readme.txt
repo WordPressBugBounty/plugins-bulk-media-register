@@ -5,7 +5,7 @@ Tags: files, ftp, import, media, uploads
 Requires at least: 5.3
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 2.01
+Stable tag: 2.02
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,9 @@ none
 6. Cron Event
 
 == Changelog ==
+
+= [2.02] 2026/11/01 =
+* Fix - Issue with Retrieving User Data When the Plugin Is activated.
 
 = [2.01] 2026/10/28 =
 * Fix - Security fix for path traversal and file handling vulnerability (Thanks to Rafael Honorato).
